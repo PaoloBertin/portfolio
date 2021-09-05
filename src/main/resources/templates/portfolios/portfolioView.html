@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+
+<html th:lang="${lang}"
+      th:with="lang=${#locale.language}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+
+<body>
+<div class="container-fluid p-0">
+
+    <!-- intestazione -->
+    <div th:replace="~{fragments/header :: header}">header</div>
+
+    <!-- corpo centrale -->
+    <br/><br/>
+    <div class="row">
+        <!-- left side -->
+        <div class="col-lg-2">
+            <div th:replace="~{fragments/left_side :: left_side}">left side</div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="row h5">
+                <!--                <div class="col-lg-4" th:text="${portfolio.name}">  -->
+                <div class="col-lg-4">
+                    <!--         <select th:onchange="javascript:location.href = '/portfolios/2'">  -->
+                    <!--         <select th:onchange="'window.location.href = \'' + @{/portfolios/} + '\' + this.value ' ">  -->
+                    <select id="comboA" onchange="redirectTo(this)">
+                        <option th:each="portfolio : ${portfolios}" th:value="${portfolio.id}" th:text="${portfolio.name}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-4" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-right" th:text="#{label.product.name}">name</th>
+                            <th class="text-right" th:text="#{label.product.historicalValue}">historical value</th>
+                            <th class="text-right" th:text="#{label.product.quantity}">quantity</th>
+                            <th class="text-right" th:text="#{label.product.avgLoadPrice}">alp</th>
+                            <th class="text-right" th:text="#{label.product.last}">last</th>
+                            <th class="text-right" th:text="#{label.product.actual}">valore attuale</th>
+                            <th class="text-right" th:text="#{label.product.variation}">% variation</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="lineItem : ${portfolio.lineItemDtos}">
+                            <td th:text="${lineItem.name}" class="text-right"></td>
+                            <td th:text="${lineItem.historicalValue}" class="text-right"></td>
+                            <td th:text="${lineItem.quantity}" class="text-right"></td>
+                            <td th:text="${lineItem.avgLoadPrice}" class="text-right"></td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br/>
+        </div>
+
+        <!-- right side -->
+        <div class="col-lg-2">
+            <div th:replace="~{fragments/right_side :: right_side}">right side</div>
+        </div>
+    </div>
+
+    <!-- pie' pagina -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div th:replace="~{fragments/footer :: footer}"></div>
+        </div>
+    </div>
+</div>
+</script>
+</body>
+</html>

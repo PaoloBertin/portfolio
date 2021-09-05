@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html th:lang="${lang}"
+      th:with="lang=${#locale.language}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+
+<body>
+<div th:fragment="header">
+    <!--
+    <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #FFCC33;">
+    -->
+    <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
+
+        <a class="navbar-brand" th:href="@{/}">
+            <img src="/images/logo_aziendale.jpg" width="210" height="52" alt="Home">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon">Admin</span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- watchlists -->
+            <ul class="navbar-nav ml-auto">
+                <!--  -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarWatch" role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span class="navbar-text" th:text="#{label.watchlist}">watchlists</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarWatch">
+                        <a class="dropdown-item" th:href="@{/watchlist/1}" th:text="#{label.watchlist.ftse}">ftse</a>
+                        <a class="dropdown-item" th:href="@{/watchlist/2}" th:text="#{label.watchlist.bonds}">ftse</a>
+                        <a class="dropdown-item" th:href="@{/watchlist/3}" th:text="#{label.watchlist.bot}">ftse</a>
+                        <a class="dropdown-item" th:href="@{/watchlist/4}" th:text="#{label.watchlist.btp}">btp</a>
+                        <a class="dropdown-item" th:href="@{/watchlist/5}" th:text="#{label.watchlist.cct}">ftse</a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- administration -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarAdmin" role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <span class="navbar-text" th:text="#{label.administration}">amministrazione</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarAdmin">
+                        <a class="dropdown-item" th:href="@{/admin/catalog/1/products}" th:text="#{label.product.stocks}">stocks</a>
+                        <a class="dropdown-item" th:href="@{/admin/catalog/2/products}" th:text="#{label.product.bonds}">bonds</a>
+                        <a class="dropdown-item" th:href="@{/admin/catalog/3/products}" th:text="#{label.product.bot}">BOT</a>
+                        <a class="dropdown-item" th:href="@{/admin/catalog/4/products}" th:text="#{label.product.btp}">BTP</a>
+                        <a class="dropdown-item" th:href="@{/admin/catalog/5/products}" th:text="#{label.product.cct}">CCT</a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- language -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/(lang=it)}">
+                        <img src="/images/Flag_of_Italy.png" width="35" height="23" alt="italiano">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/(lang=en)}">
+                        <img src="/images/Flag_of_the_United_Kingdom.png" width="35" height="23" alt="inglese">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div th:if="${message != null}" th:class="'alert alert-' + ${message.type}" th:text="${message.message}" role="alert"></div>
+
+</div>
+</body>
+</html>
+
