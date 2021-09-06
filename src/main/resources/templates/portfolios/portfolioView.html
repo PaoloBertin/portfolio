@@ -23,14 +23,21 @@
         </div>
 
         <div class="col-lg-8">
-
             <div class="row">
-                <div class="col-lg-4" th:text="${portfolio.name}"></div>
-                <div class="col-lg-4" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
+                <div class="col-lg-2" style="font-size: 1.5em" th:text="${portfolio.name}"></div>
                 <div class="col-lg-4">
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </div>
+                <div class="col-lg-3" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
+                <div class="col-lg-3">
                     <!--         <select th:onchange="javascript:location.href = '/portfolios/2'">  -->
                     <!--         <select th:onchange="'window.location.href = \'' + @{/portfolios/} + '\' + this.value ' ">  -->
-                    <select id="comboA" onchange="redirectTo(this)">
+                    <!--         <select class="form-control selectpicker" th:field="*{portfolio.id}" id="pizza"> -->
+                    <select class="form-control selectpicker" id="comboBox" th:onchange="redirectTo(this)">
+                        <option value="" th:text="#{label.choose}">choose</option>
                         <option th:each="portfolio : ${portfolios}" th:value="${portfolio.id}" th:text="${portfolio.name}"></option>
                     </select>
                 </div>
