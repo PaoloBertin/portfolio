@@ -23,8 +23,10 @@
         </div>
 
         <div class="col-lg-8">
-            <div class="row h5">
-                <!--                <div class="col-lg-4" th:text="${portfolio.name}">  -->
+
+            <div class="row">
+                <div class="col-lg-4" th:text="${portfolio.name}"></div>
+                <div class="col-lg-4" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
                 <div class="col-lg-4">
                     <!--         <select th:onchange="javascript:location.href = '/portfolios/2'">  -->
                     <!--         <select th:onchange="'window.location.href = \'' + @{/portfolios/} + '\' + this.value ' ">  -->
@@ -32,8 +34,8 @@
                         <option th:each="portfolio : ${portfolios}" th:value="${portfolio.id}" th:text="${portfolio.name}"></option>
                     </select>
                 </div>
-                <div class="col-lg-4" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
             </div>
+            <br/>
             <div class="row">
                 <div class="col-lg-12">
                     <table class="table">
@@ -62,7 +64,6 @@
                     </table>
                 </div>
             </div>
-            <br/>
         </div>
 
         <!-- right side -->
@@ -78,6 +79,5 @@
         </div>
     </div>
 </div>
-</script>
 </body>
 </html>

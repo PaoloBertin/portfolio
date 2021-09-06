@@ -26,7 +26,14 @@
             <br/><br/>
             <div class="card">
                 <div class="card-header">
-                    <h5 th:text="#{label.portfolios}">portfolios</h5>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h5 th:text="#{label.portfolios}">portfolios</h5>
+                        </div>
+                        <div class="col-lg-6">
+                            <a class="btn btn-primary float-right" th:href="@{/portfolios}" role="button" th:text="#{label.portfolio.new}">new</a>
+                        </div>
+                    </div>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:each="portfolio: ${portfolios}">

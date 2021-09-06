@@ -60,7 +60,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public Portfolio savePortfolio(Portfolio portfolio) {
 
-        return null;
+        return portfolioRepository.save(portfolio);
     }
 
     @Override

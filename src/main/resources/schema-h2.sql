@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS tools;
 DROP TABLE IF EXISTS identifiers;
 DROP TABLE IF EXISTS watchlists;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS portfolio_line_item;
+DROP TABLE IF EXISTS tools;
 DROP TABLE IF EXISTS line_items;
 DROP TABLE IF EXISTS portfolios;
 
