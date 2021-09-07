@@ -1,5 +1,6 @@
 package eu.opensource.portfolioclient.service;
 
+import eu.opensource.portfolioclient.controller.util.ProductForm;
 import eu.opensource.portfolioclient.domain.Portfolio;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
 
@@ -12,6 +13,8 @@ public interface PortfolioService {
     Portfolio getPortfolioById(Long portfolioId);
 
     List<Portfolio> getAllPortfolios();
+
+    Boolean addToolToPortfolio(ProductForm productForm);
 
     Portfolio savePortfolio(Portfolio portfolio);
 

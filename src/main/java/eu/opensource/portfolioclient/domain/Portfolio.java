@@ -5,7 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Table(name = "portfolios")
@@ -24,5 +26,5 @@ public class Portfolio {
             joinColumns = @JoinColumn(name = "portfolio_id"),
             inverseJoinColumns = @JoinColumn(name = "line_item_id"))
     @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval = true)
-    private List<LineItem> lineItems = new ArrayList<>();
+    private Set<LineItem> lineItems = new HashSet<>();
 }

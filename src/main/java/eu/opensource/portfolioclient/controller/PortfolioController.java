@@ -8,7 +8,6 @@ import eu.opensource.portfolioclient.domain.Portfolio;
 import eu.opensource.portfolioclient.domain.Product;
 import eu.opensource.portfolioclient.service.CatalogService;
 import eu.opensource.portfolioclient.service.PortfolioService;
-import eu.opensource.portfolioclient.service.impl.CatalogServiceImpl;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +26,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -125,7 +125,7 @@ public class PortfolioController {
 
         // rende persistenti dati prodotto
         Portfolio portfolio = portfolioService.getPortfolioById(productForm.getPortfolioId());
-        List<LineItem> lineItems = portfolio.getLineItems();
+        Set<LineItem> lineItems = portfolio.getLineItems();
         LineItem lineItem = new LineItem();
         lineItem.setIsin(productForm.getIsin());
         lineItem.setLoadingPrice(productForm.getPrice());
@@ -152,7 +152,8 @@ public class PortfolioController {
 
         List<Portfolio> portfolios = portfolioService.getAllPortfolios();
         uiModel.addAttribute("portfolios", portfolios);
-        Product product = catalogService.getProductByIsin(isin).orElseThrow();
+        Product product = catalogService.getProductByIsin(isin)
+                                        .orElseThrow();
 
         ProductForm productForm = new ProductForm();
         productForm.setName(product.getName());
@@ -179,21 +180,14 @@ public class PortfolioController {
         log.debug("PortfolioForm: {}", productForm);
 
         // rende persistenti dati prodotto
-        Portfolio portfolio = portfolioService.getPortfolioById(productForm.getPortfolioId());
-        List<LineItem> lineItems = portfolio.getLineItems();
-        LineItem lineItem = new LineItem();
-        lineItem.setIsin(productForm.getIsin());
-        lineItem.setLoadingPrice(productForm.getPrice());
-        lineItem.setQuantity(productForm.getQuantity());
-        lineItems.add(lineItem);
-        portfolio.setLineItems(lineItems);
-        portfolio = portfolioService.savePortfolio(portfolio);
+        Boolean saved = portfolioService.addToolToPortfolio(productForm);
 
-//        log.debug("Portfolio: {}", portfolioDto);
-
-        message = new Message("success", messageSource.getMessage("message.product_portfolio_save_success", new Object[]{}, locale));
-        redirectAttributes.addFlashAttribute("message", message);
-
+        if (saved) {
+            message = new Message("success", messageSource.getMessage("message.product_portfolio_save_success", new Object[]{}, locale));
+            redirectAttributes.addFlashAttribute("message", message);
+        } else {
+            message = new Message("error", messageSource.getMessage("message.product_portfolio_save_fail", new Object[]{}, locale));
+        }
         return "redirect:/";
     }
 }
