@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -156,6 +157,8 @@ public class PortfolioController {
         ProductForm productForm = new ProductForm();
         productForm.setName(product.getName());
         productForm.setIsin(isin);
+        productForm.setPrice(BigDecimal.valueOf(1.0));
+        productForm.setQuantity(1);
         uiModel.addAttribute("productForm", productForm);
 
         return "portfolios/addToolToPorfolio";
