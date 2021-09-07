@@ -30,6 +30,7 @@
             <table class="table">
                 <thead class="thead-light">
                 <tr>
+                    <th>&nbsp;</th>
                     <th th:text="#{label.product.name}"></th>
                     <th th:text="#{label.product.lastPrice}"></th>
                     <th th:text="#{label.product.percChange}"></th>
@@ -39,6 +40,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="product : ${watchlist.products}">
+                    <td>
+                        <a th:href="@{/portfolios/portfolio/{isin}(isin=${product.isin})}" th:title="#{label.watchlist.title}">
+                            <i class="fa fa-briefcase fa-lg"></i>
+                        </a>
+                    </td>
                     <td th:text="${product.name}"></td>
                     <td th:text="${product.lastPrice}"></td>
                     <td th:text="${product.percChange}"></td>

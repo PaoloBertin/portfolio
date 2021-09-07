@@ -1,5 +1,6 @@
 package eu.opensource.portfolioclient.service.impl;
 
+import eu.opensource.portfolioclient.domain.Portfolio;
 import eu.opensource.portfolioclient.service.PortfolioService;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ class PortfolioServiceImplTest {
     @Test
     void getPortfolioByIdTest() {
 
-        PortfolioDto portfolio = portfolioService.getPortfolioById(1L);
+        Portfolio portfolio = portfolioService.getPortfolioById(1L);
 
-        assertThat(portfolio.name()).isEqualTo("Portafoglio 1");
+        assertThat(portfolio.getName()).isEqualTo("Portafoglio 1");
 
     }
 

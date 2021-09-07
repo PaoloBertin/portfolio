@@ -3,8 +3,8 @@ package eu.opensource.portfolioclient.service.impl;
 import eu.opensource.portfolioclient.domain.LineItem;
 import eu.opensource.portfolioclient.domain.Portfolio;
 import eu.opensource.portfolioclient.repository.PortfolioRepository;
-import eu.opensource.portfolioclient.service.PortfolioService;
 import eu.opensource.portfolioclient.service.CatalogService;
+import eu.opensource.portfolioclient.service.PortfolioService;
 import eu.opensource.portfolioclient.service.util.LineItemDto;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @RequiredArgsConstructor
 @Service("portfolioService")
 public class PortfolioServiceImpl implements PortfolioService {
@@ -25,9 +24,9 @@ public class PortfolioServiceImpl implements PortfolioService {
     private final CatalogService productService;
 
     @Override
-    public PortfolioDto getPortfolioById(Long portfolioId) {
+    public PortfolioDto getPortfolioDtoById(Long portfolioId) {
 
-        Optional<Portfolio> portfolioTest = portfolioRepository.findById(portfolioId);
+        Optional<Portfolio> portfolioOptional = portfolioRepository.findById(portfolioId);
 
         return portfolioRepository.findById(portfolioId)
                                   .map((portfolio) -> {
@@ -37,7 +36,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                                           LineItemDto lineItemDto = new LineItemDto(lineItem.getId(),
                                                                                     lineItem.getIsin(),
                                                                                     productService.getProductByIsin(lineItem.getIsin())
-                                                                                                  .get() // TODO
+                                                                                                  .orElseThrow()
                                                                                                   .getName(),
                                                                                     lineItem.getQuantity(),
                                                                                     lineItem.getLoadingPrice(),
@@ -48,7 +47,13 @@ public class PortfolioServiceImpl implements PortfolioService {
                                       return new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                   })
                                   .orElseThrow();
+    }
 
+    @Override
+    public Portfolio getPortfolioById(Long portfolioId) {
+
+        return portfolioRepository.findById(portfolioId)
+                                  .orElseThrow();
     }
 
     @Override

@@ -2,8 +2,13 @@ package eu.opensource.portfolioclient.controller;
 
 import eu.opensource.portfolioclient.controller.util.Message;
 import eu.opensource.portfolioclient.controller.util.PortfolioForm;
+import eu.opensource.portfolioclient.controller.util.ProductForm;
+import eu.opensource.portfolioclient.domain.LineItem;
 import eu.opensource.portfolioclient.domain.Portfolio;
+import eu.opensource.portfolioclient.domain.Product;
+import eu.opensource.portfolioclient.service.CatalogService;
 import eu.opensource.portfolioclient.service.PortfolioService;
+import eu.opensource.portfolioclient.service.impl.CatalogServiceImpl;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,13 +37,15 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
+    private final CatalogService catalogService;
+
     @GetMapping("/{portfolioId}")
     public String viewPortfolioById(@PathVariable Long portfolioId, Model uiModel) {
 
         List<Portfolio> portfolios = portfolioService.getAllPortfolios();
         uiModel.addAttribute("portfolios", portfolios);
 
-        PortfolioDto portfolio = portfolioService.getPortfolioById(portfolioId);
+        PortfolioDto portfolio = portfolioService.getPortfolioDtoById(portfolioId);
         uiModel.addAttribute("portfolio", portfolio);
 
         return "portfolios/portfolioView";
@@ -79,4 +87,110 @@ public class PortfolioController {
         return "redirect:/";
     }
 
+    /**
+     * Richiama form da un portafoglio per aggiungere uno strumento al portafoglio stesso
+     *
+     * @return view
+     */
+    @GetMapping("/{portfolioId}/tools")
+    public String getFormAddTool(@PathVariable Long portfolioId, Model uiModel) {
+
+        PortfolioDto portfolio = portfolioService.getPortfolioDtoById(portfolioId);
+        String portfolioName = portfolio.name();
+
+        ProductForm productForm = new ProductForm();
+        productForm.setPortfolioId(portfolioId);
+        productForm.setLocalDateTime(LocalDateTime.now());
+
+        uiModel.addAttribute("portfolioName", portfolioName);
+        uiModel.addAttribute("productForm", productForm);
+
+        return "portfolios/addTool";
+    }
+
+    @PostMapping("/{portfolioId}/tools")
+    public String saveNewTool(@Valid ProductForm productForm, BindingResult result, Model uiModel,
+                              RedirectAttributes redirectAttributes, Locale locale) {
+
+        // verifica che i dati del form siano validi
+        Message message;
+        if (result.hasErrors()) {
+            message = new Message("error", messageSource.getMessage("message.product_portfolio_save_fail", new Object[]{}, locale));
+            uiModel.addAttribute("message", message);
+            uiModel.addAttribute("portfolioForm", new PortfolioForm());
+            return "catalog/createPortfolio";
+        }
+        log.debug("PortfolioForm: {}", productForm);
+
+        // rende persistenti dati prodotto
+        Portfolio portfolio = portfolioService.getPortfolioById(productForm.getPortfolioId());
+        List<LineItem> lineItems = portfolio.getLineItems();
+        LineItem lineItem = new LineItem();
+        lineItem.setIsin(productForm.getIsin());
+        lineItem.setLoadingPrice(productForm.getPrice());
+        lineItem.setQuantity(productForm.getQuantity());
+        lineItems.add(lineItem);
+        portfolio.setLineItems(lineItems);
+        portfolio = portfolioService.savePortfolio(portfolio);
+
+//        log.debug("Portfolio: {}", portfolioDto);
+
+        message = new Message("success", messageSource.getMessage("message.product_portfolio_save_success", new Object[]{}, locale));
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/";
+    }
+
+    /**
+     * Richiama form da una watchlist per aggiungere uno strumento ad un portafoglio
+     *
+     * @return view
+     */
+    @GetMapping("/portfolio/{isin}")
+    public String getFormAddToolToPortfolio(@PathVariable String isin, Model uiModel) {
+
+        List<Portfolio> portfolios = portfolioService.getAllPortfolios();
+        uiModel.addAttribute("portfolios", portfolios);
+        Product product = catalogService.getProductByIsin(isin).orElseThrow();
+
+        ProductForm productForm = new ProductForm();
+        productForm.setName(product.getName());
+        productForm.setIsin(isin);
+        uiModel.addAttribute("productForm", productForm);
+
+        return "portfolios/addToolToPorfolio";
+    }
+
+    @PostMapping("/portfolio/tools")
+    public String saveNewToolInPortfolio(@Valid ProductForm productForm, BindingResult result, Model uiModel,
+                                         RedirectAttributes redirectAttributes, Locale locale) {
+
+        // verifica che i dati del form siano validi
+        Message message;
+        if (result.hasErrors()) {
+            message = new Message("error", messageSource.getMessage("message.product_portfolio_save_fail", new Object[]{}, locale));
+            uiModel.addAttribute("message", message);
+            uiModel.addAttribute("portfolioForm", new PortfolioForm());
+            return "catalog/createPortfolio";
+        }
+        log.debug("PortfolioForm: {}", productForm);
+
+        // rende persistenti dati prodotto
+        Portfolio portfolio = portfolioService.getPortfolioById(productForm.getPortfolioId());
+        List<LineItem> lineItems = portfolio.getLineItems();
+        LineItem lineItem = new LineItem();
+        lineItem.setIsin(productForm.getIsin());
+        lineItem.setLoadingPrice(productForm.getPrice());
+        lineItem.setQuantity(productForm.getQuantity());
+        lineItems.add(lineItem);
+        portfolio.setLineItems(lineItems);
+        portfolio = portfolioService.savePortfolio(portfolio);
+
+//        log.debug("Portfolio: {}", portfolioDto);
+
+        message = new Message("success", messageSource.getMessage("message.product_portfolio_save_success", new Object[]{}, locale));
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/";
+    }
 }

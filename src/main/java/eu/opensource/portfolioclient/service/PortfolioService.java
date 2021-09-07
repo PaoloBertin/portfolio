@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface PortfolioService {
 
-    PortfolioDto getPortfolioById(Long portfolioId);
+    PortfolioDto getPortfolioDtoById(Long portfolioId);
+
+    Portfolio getPortfolioById(Long portfolioId);
 
     List<Portfolio> getAllPortfolios();
 
