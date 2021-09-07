@@ -37,7 +37,26 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:each="portfolio: ${portfolios}">
-                        <a th:href="@{/portfolios/{portfolioId}(portfolioId=${portfolio.id})}" th:text="${portfolio.name}">name</a>
+                        <div  class="row">
+                            <div class="col-lg-10">
+                                <a th:href="@{/portfolios/{portfolioId}(portfolioId=${portfolio.id})}" th:text="${portfolio.name}">name</a>
+                            </div>
+
+                            <div class="col-lg-1">
+                                <a th:href="@{/}">
+                                    <i class="fa fa-edit fa-lg"></i>
+                                </a>
+                            </div>
+                            <div class="col-lg-1">
+                                <form th:action="@{/}" th:method="delete">
+                                    <input type="hidden" name="id" th:value="${portfolio.id}"/>
+                                    <button class="btn">
+                                        <i class="fa fa-trash fa-lg"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
                     </li>
                 </ul>
             </div>
