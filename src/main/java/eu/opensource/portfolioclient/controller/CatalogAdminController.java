@@ -41,7 +41,7 @@ public class CatalogAdminController {
         Optional<Tool> tool = catalogService.getToolById(toolId);
 
         String toolName = tool.map(Tool::getName)
-                              .orElseThrow();
+                              .orElseThrow(); // TODO
 
         uiModel.addAttribute("toolName", toolName);
 
@@ -54,7 +54,7 @@ public class CatalogAdminController {
     }
 
     @GetMapping("/tools/products")
-    public String getCreateFormProduct(Model uiModel) {
+    public String getCreateProductForm(Model uiModel) {
 
         List<Tool> tools = catalogService.getAllTools();
         uiModel.addAttribute("tools", tools);
@@ -96,7 +96,7 @@ public class CatalogAdminController {
     }
 
     @GetMapping("/tools/{isin}")
-    public String getUpdaFormProduct(@PathVariable String isin, Model uiModel) {
+    public String getUpdaProductForm(@PathVariable String isin, Model uiModel) {
 
         List<Tool> tools = catalogService.getAllTools();
         uiModel.addAttribute("tools", tools);
@@ -131,8 +131,10 @@ public class CatalogAdminController {
         // rende persistenti dati prodotto
         Tool tool = catalogService.getToolById(productForm.getToolId())
                                   .orElseThrow();
-        Product product = new Product();
-        product.setId(productForm.getId());
+
+        Product product = catalogService.getProductById(productForm.getId())
+                                        .orElseThrow();
+
         product.setName(productForm.getName());
         product.setIsin(productForm.getIsin());
         product.setTool(tool);

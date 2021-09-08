@@ -12,6 +12,8 @@ public interface CatalogService {
 
     Optional<Product> getProductByIsin(String isin);
 
+    Optional<Product> getProductById(Long id);
+
     List<Product> getAllProducts();
 
     List<Product> getProductsByTool(Long toolId);
