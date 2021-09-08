@@ -15,10 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -89,7 +86,7 @@ public class PortfolioController {
     }
 
     @GetMapping(value = "/{portfolioId}", params = "form")
-    public String getFormUpdatePortfolio(@PathVariable Long portfolioId,  Model uiModel) {
+    public String getFormUpdatePortfolio(@PathVariable Long portfolioId, Model uiModel) {
 
         Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
         PortfolioForm portfolioForm = new PortfolioForm();
@@ -101,6 +98,32 @@ public class PortfolioController {
         return "portfolios/updatePortfolio";
     }
 
+    @PutMapping
+    public String updatePortfolio(@Valid PortfolioForm portfolioForm, BindingResult result, Model uiModel,
+                                  RedirectAttributes redirectAttributes,
+                                  Locale locale) {
+
+        // verifica che i dati del form siano validi
+        Message message;
+        if (result.hasErrors()) {
+            message = new Message("error", messageSource.getMessage("message.portfolio_save_fail", new Object[]{}, locale));
+            uiModel.addAttribute("message", message);
+            uiModel.addAttribute("portfolioForm", new PortfolioForm());
+            return "catalog/createPortfolio";
+        }
+        log.debug("PortfolioForm: {}", portfolioForm);
+
+        // rende persistenti dati prodotto
+        Portfolio portfolio = portfolioService.getPortfolioById(portfolioForm.getId());
+        portfolio.setName(portfolioForm.getName());
+        portfolio = portfolioService.savePortfolio(portfolio);
+        log.debug("Portfolio: {}", portfolio);
+
+        message = new Message("success", messageSource.getMessage("message.portfolio_save_success", new Object[]{}, locale));
+        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/";
+    }
 
     /**
      * Richiama form da un portafoglio per aggiungere uno strumento al portafoglio stesso
@@ -115,7 +138,6 @@ public class PortfolioController {
 
         ProductForm productForm = new ProductForm();
         productForm.setPortfolioId(portfolioId);
-        productForm.setLocalDateTime(LocalDateTime.now());
 
         uiModel.addAttribute("portfolioName", portfolioName);
         uiModel.addAttribute("productForm", productForm);
@@ -146,7 +168,7 @@ public class PortfolioController {
         lineItem.setQuantity(productForm.getQuantity());
         lineItems.add(lineItem);
         portfolio.setLineItems(lineItems);
-        portfolio = portfolioService.savePortfolio(portfolio);
+        Boolean saved = portfolioService.addToolToPortfolio(productForm);
 
 //        log.debug("Portfolio: {}", portfolioDto);
 
@@ -166,9 +188,9 @@ public class PortfolioController {
 
         List<Portfolio> portfolios = portfolioService.getAllPortfolios();
         uiModel.addAttribute("portfolios", portfolios);
-        Product product = catalogService.getProductByIsin(isin)
-                                        .orElseThrow();
 
+        Product product = catalogService.getProductByIsin(isin)
+                                        .orElseThrow(); // TODO
         ProductForm productForm = new ProductForm();
         productForm.setName(product.getName());
         productForm.setIsin(isin);
