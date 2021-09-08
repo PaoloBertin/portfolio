@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="col-lg-1">
-                                <a th:href="@{/}">
+                                <a th:href="@{/portfolios/{portfolioId}/?form=true(portfolioId=${portfolio.id})}">
                                     <i class="fa fa-edit fa-lg"></i>
                                 </a>
                             </div>
@@ -61,7 +61,6 @@
                 </ul>
             </div>
         </div>
-
         <!-- right side -->
         <div class="col-lg-3">
             <div th:replace="~{fragments/right_side :: right_side}">right side</div>

@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,7 +23,7 @@ class PortfolioControllerTest {
 
     @Sql({"/schema-h2.sql", "/data-h2.sql"})
     @Test
-    void viewPortfolioById() throws Exception {
+    void viewPortfolioByIdTest() throws Exception {
 
         mvc.perform(get(url + "/{portfolioId}", 1))
            .andExpect(status().isOk())
@@ -34,7 +33,7 @@ class PortfolioControllerTest {
 
     @Sql({"/schema-h2.sql", "/data-h2.sql"})
     @Test
-    void getCreateFormPortfolioTest() throws Exception {
+    void getFormCreatePortfolioTest() throws Exception {
 
         mvc.perform(get(url))
            .andExpect(status().isOk())
@@ -44,11 +43,37 @@ class PortfolioControllerTest {
 
     @Sql({"/schema-h2.sql", "/data-h2.sql"})
     @Test
-    void createPortfolioTest() throws Exception {
+    void createPortfolio() {
 
-        mvc.perform(post(url).param("name", "Portfolio X")
-                             .param("cash", "50000.0"))
-           .andExpect(status().is3xxRedirection())
-        ;
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void getFormUpdatePortfolio() {
+
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void getFormAddTool() {
+
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void saveNewTool() {
+
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void getFormAddToolToPortfolio() {
+
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void saveNewToolInPortfolio() {
+
     }
 }

@@ -48,6 +48,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                                                                                             .multiply(BigDecimal.valueOf(lineItem.getQuantity())));
                                           lineItemDtos.add(lineItemDto);
                                       });
+//                                      return new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
+                                      PortfolioDto portfolioDto = new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                       return new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                   })
                                   .orElseThrow();

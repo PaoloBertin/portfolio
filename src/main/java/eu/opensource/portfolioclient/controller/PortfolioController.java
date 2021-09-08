@@ -88,6 +88,20 @@ public class PortfolioController {
         return "redirect:/";
     }
 
+    @GetMapping(value = "/{portfolioId}", params = "form")
+    public String getFormUpdatePortfolio(@PathVariable Long portfolioId,  Model uiModel) {
+
+        Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
+        PortfolioForm portfolioForm = new PortfolioForm();
+        portfolioForm.setId(portfolioId);
+        portfolioForm.setName(portfolio.getName());
+
+        uiModel.addAttribute("portfolioForm", portfolioForm);
+
+        return "portfolios/updatePortfolio";
+    }
+
+
     /**
      * Richiama form da un portafoglio per aggiungere uno strumento al portafoglio stesso
      *
@@ -97,7 +111,7 @@ public class PortfolioController {
     public String getFormAddTool(@PathVariable Long portfolioId, Model uiModel) {
 
         PortfolioDto portfolio = portfolioService.getPortfolioDtoById(portfolioId);
-        String portfolioName = portfolio.name();
+        String portfolioName = portfolio.getName();
 
         ProductForm productForm = new ProductForm();
         productForm.setPortfolioId(portfolioId);
