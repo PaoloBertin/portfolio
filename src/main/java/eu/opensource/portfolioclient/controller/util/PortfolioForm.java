@@ -12,6 +12,6 @@ public class PortfolioForm {
 
     private String name;
 
-    @Positive
+//    @Positive
     private BigDecimal cash;
 }

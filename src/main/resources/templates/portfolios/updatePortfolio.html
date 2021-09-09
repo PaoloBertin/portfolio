@@ -26,7 +26,7 @@
             <h5 th:text="#{label.portfolio.update}">edit portfolio</h5>
             <br/><br/>
 
-            <form name="updatePortfolioForm" th:object="${portfolioForm}" th:action="@{portfolios}" th:method="put">
+            <form name="updatePortfolioForm" th:object="${portfolioForm}" th:action="@{/portfolios}" th:method="put">
 
                 <!--  <input type="hidden" th:field="*{categoryId}"/> -->
                 <input type="hidden" th:field="*{id}"/>
@@ -38,7 +38,8 @@
                     </div>
                 </div>
                 <br/><br/>
-                <button type="submit" class="btn btn-primary" style="margin-right: 5px" th:text="#{label.send}"></button>
+                <button type="submit" class="btn btn-primary" style="margin-right: 5px" th:text="#{label.send}">
+                </button>
                 <a class="btn btn-primary" role="button" th:href="@{/}"th:text="#{label.cancel}">cancel</a>
             </form>
         </div>
