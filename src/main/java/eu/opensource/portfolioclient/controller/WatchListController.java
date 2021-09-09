@@ -1,7 +1,6 @@
 package eu.opensource.portfolioclient.controller;
 
 import eu.opensource.portfolioclient.domain.Watchlist;
-import eu.opensource.portfolioclient.service.CatalogService;
 import eu.opensource.portfolioclient.service.WatchListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/watchlist")
 @Controller
 public class WatchListController {
-
-    private final CatalogService catalogService;
 
     private final WatchListService watchListService;
 
