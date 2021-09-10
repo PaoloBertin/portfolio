@@ -47,12 +47,12 @@
                     </td>
 
                     <td class="text-letf"  th:text="${product.name}"></td>
-                    <td class="text-right" th:text="${#numbers.formatDecimal(product.lastPrice, 1, 2)}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(product.lastPrice, 1, 4)}"></td>
                     <td class="text-right"
                         th:style="${product.percChange < 0 ? 'color: red;' : 'color: black;'}"
                         th:text="${#numbers.formatDecimal(product.percChange, 1, 2)}"></td>
                     <td class="text-right" th:text="${#temporals.format(product.now, 'HH:mm:ss')}"></td>
-                    <td class="text-right" th:text="${#numbers.formatDecimal(product.openingPrice, 1, 2)}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(product.openingPrice, 1, 4)}"></td>
                 </tr>
                 </tbody>
             </table>
