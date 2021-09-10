@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS portfolio_line_item;
 DROP TABLE IF EXISTS tools;
 DROP TABLE IF EXISTS line_items;
 DROP TABLE IF EXISTS portfolios;
+DROP TABLE IF EXISTS market_prices;
 
 CREATE TABLE IF NOT EXISTS identifiers (
     isin VARCHAR(13),
@@ -62,4 +63,11 @@ CREATE TABLE IF NOT EXISTS portfolio_line_item(
     CONSTRAINT portfolio_line_item_uk_01 UNIQUE (line_item_id),
     CONSTRAINT portfolio_line_item_fk_01 FOREIGN KEY (portfolio_id) REFERENCES portfolios(id),
     CONSTRAINT portfolio_line_item_fk_02 FOREIGN KEY (line_item_id) REFERENCES line_items(id)
+);
+
+CREATE TABLE IF NOT EXISTS market_prices(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    isin VARCHAR(13) NOT NULL,
+    openng_price DECIMAL(10,4),
+    last_price DECIMAL(10,4)
 );
