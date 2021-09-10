@@ -46,10 +46,10 @@
                         </a>
                     </td>
                     <td th:text="${product.name}"></td>
-                    <td th:text="${product.lastPrice}"></td>
-                    <td th:text="${product.percChange}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.lastPrice, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.percChange, 1, 2)}"></td>
                     <td th:text="${#temporals.format(product.now, 'HH:mm:ss')}"></td>
-                    <td th:text="${product.openingPrice}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.openingPrice, 1, 2)}"></td>
                 </tr>
                 </tbody>
             </table>

@@ -1,12 +1,13 @@
 package eu.opensource.portfolioclient.service.impl;
 
 import eu.opensource.portfolioclient.domain.Identifier;
+import eu.opensource.portfolioclient.domain.MarketPrices;
 import eu.opensource.portfolioclient.domain.Product;
 import eu.opensource.portfolioclient.domain.Watchlist;
-import eu.opensource.portfolioclient.repository.ProductRepository;
 import eu.opensource.portfolioclient.repository.WatchlistRepository;
 import eu.opensource.portfolioclient.service.CatalogService;
 import eu.opensource.portfolioclient.service.IdentifierService;
+import eu.opensource.portfolioclient.service.MarketPricesService;
 import eu.opensource.portfolioclient.service.WatchListService;
 import eu.opensource.portfolioclient.service.util.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ public class WatchListServiceImpl implements WatchListService {
 
     private final WatchlistRepository watchlistRepository;
 
+    private final MarketPricesService marketPricesService;
+
     @Override
     public Watchlist getWatchlist(Long watchlistId, Pageable pageable) {
 
@@ -40,19 +43,22 @@ public class WatchListServiceImpl implements WatchListService {
         List<ProductDto> productDtos = new ArrayList<>();
 
         identifiers.forEach(identifier -> {
+            MarketPrices marketPrices = marketPricesService.getMarketPricesByIsin(identifier.getIsin());
             Product product = catalogService.getProductByIsin(identifier.getIsin())
-                                               .orElseThrow();
+                                            .orElseThrow();
+            double openingPrice= marketPrices.getOpeningPrice().doubleValue();
+            double lastPrice = marketPrices.getLastPrice().doubleValue();
+            double percChange = (lastPrice - openingPrice)/openingPrice *100;
             ProductDto productDto = new ProductDto(product.getId(),
                                                    product.getIsin(),
                                                    product.getName(),
                                                    product.getTool(),
-                                                   BigDecimal.ZERO,
-                                                   0.0,
+                                                   marketPrices.getLastPrice(),
+                                                   percChange,
                                                    LocalDateTime.now(),
-                                                   BigDecimal.ZERO);
+                                                   marketPrices.getOpeningPrice());
             productDtos.add(productDto);
         });
-//        Page<ProductDto> productDtoPage = new PageImpl<>(productDtos, pageable, total);
         Page<ProductDto> productDtoPage = new PageImpl<>(productDtos, pageable, identifiers.getTotalElements());
         watchlist.setProducts(productDtoPage);
 
