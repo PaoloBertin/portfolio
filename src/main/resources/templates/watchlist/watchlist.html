@@ -31,11 +31,11 @@
                 <thead class="thead-light">
                 <tr>
                     <th>&nbsp;</th>
-                    <th th:text="#{label.product.name}"></th>
-                    <th th:text="#{label.product.lastPrice}"></th>
-                    <th th:text="#{label.product.percChange}"></th>
-                    <th th:text="#{label.product.now}"></th>
-                    <th th:text="#{label.product.openingPrice}"></th>
+                    <th class="text-letf"  th:text="#{label.product.name}"></th>
+                    <th class="text-right" th:text="#{label.product.lastPrice}"></th>
+                    <th class="text-right" th:text="#{label.product.percChange}"></th>
+                    <th class="text-right" th:text="#{label.product.now}"></th>
+                    <th class="text-right" th:text="#{label.product.openingPrice}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,11 +45,11 @@
                             <i class="fa fa-briefcase fa-lg"></i>
                         </a>
                     </td>
-                    <td th:text="${product.name}"></td>
-                    <td th:text="${#numbers.formatDecimal(product.lastPrice, 1, 2)}"></td>
-                    <td th:text="${#numbers.formatDecimal(product.percChange, 1, 2)}"></td>
-                    <td th:text="${#temporals.format(product.now, 'HH:mm:ss')}"></td>
-                    <td th:text="${#numbers.formatDecimal(product.openingPrice, 1, 2)}"></td>
+                    <td class="text-letf" th:text="${product.name}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(product.lastPrice, 1, 2)}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(product.percChange, 1, 2)}"></td>
+                    <td class="text-right" th:text="${#temporals.format(product.now, 'HH:mm:ss')}"></td>
+                    <td class="text-right" th:text="${#numbers.formatDecimal(product.openingPrice, 1, 2)}"></td>
                 </tr>
                 </tbody>
             </table>

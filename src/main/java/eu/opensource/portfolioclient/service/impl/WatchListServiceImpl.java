@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +45,11 @@ public class WatchListServiceImpl implements WatchListService {
             MarketPrices marketPrices = marketPricesService.getMarketPricesByIsin(identifier.getIsin());
             Product product = catalogService.getProductByIsin(identifier.getIsin())
                                             .orElseThrow();
-            double openingPrice= marketPrices.getOpeningPrice().doubleValue();
-            double lastPrice = marketPrices.getLastPrice().doubleValue();
-            double percChange = (lastPrice - openingPrice)/openingPrice *100;
+            double openingPrice = marketPrices.getOpeningPrice()
+                                              .doubleValue();
+            double lastPrice = marketPrices.getLastPrice()
+                                           .doubleValue();
+            double percChange = (lastPrice - openingPrice) / openingPrice * 100;
             ProductDto productDto = new ProductDto(product.getId(),
                                                    product.getIsin(),
                                                    product.getName(),
