@@ -225,4 +225,15 @@ public class PortfolioController {
         }
         return "redirect:/";
     }
+
+    @DeleteMapping
+    public String deletePortfolio(@RequestParam Long portfolioId) {
+
+        Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
+
+        portfolioService.deletePortfolio(portfolio);
+
+        return "redirect:/";
+    }
+
 }

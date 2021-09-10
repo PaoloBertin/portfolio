@@ -120,4 +120,10 @@ public class PortfolioServiceImpl implements PortfolioService {
         return null;
     }
 
+    @Override
+    public void deletePortfolio(Portfolio portfolio) {
+
+        portfolioRepository.delete(portfolio);
+    }
+
 }

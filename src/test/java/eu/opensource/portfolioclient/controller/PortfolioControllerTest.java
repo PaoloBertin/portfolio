@@ -110,11 +110,20 @@ class PortfolioControllerTest {
     @Test
     void saveNewToolInPortfolioTest() throws Exception {
 
-        mvc.perform(((post(url + "/portfolio/tools")).param("isin", "IT0001278511")
-                                                     .param("price", "1.25")
-                                                     .param("quantity", "10")
-                                                     .param("portfolioId", "2")))
+        mvc.perform(post(url + "/portfolio/tools").param("isin", "IT0001278511")
+                                                  .param("price", "1.25")
+                                                  .param("quantity", "10")
+                                                  .param("portfolioId", "2"))
            .andExpect(flash().attribute("message", hasProperty("type", equalTo("success"))))
            .andExpect(redirectedUrl("/"));
+    }
+
+    @Sql({"/schema-h2.sql", "/data-h2.sql"})
+    @Test
+    void deletePortfolioTest() throws Exception {
+
+        mvc.perform(delete(url).param("portfolioId","2"))
+           .andExpect(redirectedUrl("/"))
+        ;
     }
 }

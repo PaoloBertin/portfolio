@@ -19,4 +19,6 @@ public interface PortfolioService {
     Portfolio savePortfolio(Portfolio portfolio);
 
     Portfolio updatePortfolio(Portfolio portfolio);
+
+    void deletePortfolio(Portfolio portfolio);
 }

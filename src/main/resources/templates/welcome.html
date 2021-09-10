@@ -48,8 +48,8 @@
                                 </a>
                             </div>
                             <div class="col-lg-1">
-                                <form th:action="@{/}" th:method="delete">
-                                    <input type="hidden" name="id" th:value="${portfolio.id}"/>
+                                <form th:action="@{/portfolios}" th:method="delete">
+                                    <input type="hidden" name="portfolioId" th:value="${portfolio.id}"/>
                                     <button class="btn">
                                         <i class="fa fa-trash fa-lg"></i>
                                     </button>
