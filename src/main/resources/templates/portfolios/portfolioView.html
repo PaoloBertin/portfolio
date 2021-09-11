@@ -24,15 +24,7 @@
 
         <div class="col-lg-8">
             <div class="row">
-                <!--
-                <div class="col-lg-2" style="font-size: 1.5em" th:text="${portfolio.name}"></div>
-                -->
                 <div class="col-lg-3" style="font-size: 1.5em" th:text="${portfolio.name}"></div>
-                <!--
-                <div class="col-lg-4">
-                    <a class="btn btn-primary" th:href="@{/portfolios/{portfolioId}/tools(portfolioId=${portfolio.id})}" role="button" th:text="#{label.portfolio.add}">new tool</a>
-                </div>
-                -->
                 <div class="col-lg-6" th:text="'Cash = ' + ${portfolio.cash}">liquidità</div>
                 <div class="col-lg-3">
                     <!--         <select th:onchange="javascript:location.href = '/portfolios/2'">  -->
@@ -55,19 +47,19 @@
                             <th class="text-right" th:text="#{label.product.quantity}">quantity</th>
                             <th class="text-right" th:text="#{label.product.avgLoadPrice}">alp</th>
                             <th class="text-right" th:text="#{label.product.last}">last</th>
-                            <th class="text-right" th:text="#{label.product.actual}">valore attuale</th>
+                            <th class="text-right" th:text="#{label.product.actualValue}">valore attuale</th>
                             <th class="text-right" th:text="#{label.product.variation}">% variation</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="lineItem : ${portfolio.lineItemDtos}">
-                            <td th:text="${lineItem.name}" class="text-right"></td>
-                            <td th:text="${lineItem.historicalValue}" class="text-right"></td>
-                            <td th:text="${lineItem.quantity}" class="text-right"></td>
-                            <td th:text="${lineItem.avgLoadPrice}" class="text-right"></td>
-                            <td class="text-right">&nbsp;</td>
-                            <td class="text-right">&nbsp;</td>
-                            <td class="text-right">&nbsp;</td>
+                            <td class="text-right" th:text="${lineItem.productName}"></td>
+                            <td class="text-right" th:text="${lineItem.historicalValue}"></td>
+                            <td class="text-right" th:text="${lineItem.quantity}"></td>
+                            <td class="text-right" th:text="${lineItem.avgLoadPrice}"></td>
+                            <td class="text-right" th:text="${lineItem.lastPrice}"></td>
+                            <td class="text-right" th:text="${lineItem.actualValue}"></td>
+                            <td class="text-right" th:text="${lineItem.percentChange}"></td>
                         </tr>
                         </tbody>
                     </table>

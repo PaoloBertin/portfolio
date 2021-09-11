@@ -5,6 +5,7 @@ import eu.opensource.portfolioclient.domain.LineItem;
 import eu.opensource.portfolioclient.domain.Portfolio;
 import eu.opensource.portfolioclient.repository.PortfolioRepository;
 import eu.opensource.portfolioclient.service.CatalogService;
+import eu.opensource.portfolioclient.service.MarketPricesService;
 import eu.opensource.portfolioclient.service.PortfolioService;
 import eu.opensource.portfolioclient.service.util.LineItemDto;
 import eu.opensource.portfolioclient.service.util.PortfolioDto;
@@ -13,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -27,28 +28,43 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     private final CatalogService productService;
 
+    private final MarketPricesService marketPricesService;
+
     @Override
     public PortfolioDto getPortfolioDtoById(Long portfolioId) {
-
-        Optional<Portfolio> portfolioOptional = portfolioRepository.findById(portfolioId);
 
         return portfolioRepository.findById(portfolioId)
                                   .map((portfolio) -> {
                                       Set<LineItem> lineItems = portfolio.getLineItems();
                                       Set<LineItemDto> lineItemDtos = new HashSet<>();
                                       lineItems.forEach(lineItem -> {
-                                          LineItemDto lineItemDto = new LineItemDto(lineItem.getId(),
-                                                                                    lineItem.getIsin(),
-                                                                                    productService.getProductByIsin(lineItem.getIsin())
-                                                                                                  .orElseThrow()
-                                                                                                  .getName(),
-                                                                                    lineItem.getQuantity(),
-                                                                                    lineItem.getLoadingPrice(),
-                                                                                    lineItem.getLoadingPrice()
-                                                                                            .multiply(BigDecimal.valueOf(lineItem.getQuantity())));
+                                          Long lineItemId = lineItem.getId();
+                                          String isin = lineItem.getIsin();
+                                          String productName = productService.getProductByIsin(lineItem.getIsin())
+                                                                             .orElseThrow()
+                                                                             .getName();
+                                          int quantity = lineItem.getQuantity();
+                                          BigDecimal loadingPrice = lineItem.getLoadingPrice();
+                                          BigDecimal historicalValue = loadingPrice.multiply(BigDecimal.valueOf(quantity));
+                                          BigDecimal openingPrice = marketPricesService.getMarketPricesByIsin(lineItem.getIsin())
+                                                                                       .getOpeningPrice();
+                                          BigDecimal lastPrice = marketPricesService.getMarketPricesByIsin(lineItem.getIsin())
+                                                                                    .getLastPrice();
+                                          BigDecimal actualValue = lastPrice.multiply(BigDecimal.valueOf(lineItem.getQuantity()));
+                                          double percChange = ((lastPrice.add(loadingPrice.negate())).divide(loadingPrice, 4, RoundingMode.HALF_DOWN)).doubleValue();
+//                                          double percentChange = 0.0;
+                                          LineItemDto lineItemDto = new LineItemDto(lineItemId,
+                                                                                    isin,
+                                                                                    productName,
+                                                                                    quantity,
+                                                                                    loadingPrice,
+                                                                                    historicalValue,
+                                                                                    openingPrice,
+                                                                                    lastPrice,
+                                                                                    actualValue,
+                                                                                    percChange);
                                           lineItemDtos.add(lineItemDto);
                                       });
-//                                      return new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                       PortfolioDto portfolioDto = new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                       return new PortfolioDto(portfolio.getId(), portfolio.getName(), portfolio.getCash(), lineItemDtos);
                                   })
