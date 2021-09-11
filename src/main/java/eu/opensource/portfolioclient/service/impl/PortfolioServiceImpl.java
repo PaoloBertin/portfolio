@@ -52,7 +52,6 @@ public class PortfolioServiceImpl implements PortfolioService {
                                                                                     .getLastPrice();
                                           BigDecimal actualValue = lastPrice.multiply(BigDecimal.valueOf(lineItem.getQuantity()));
                                           double percChange = ((lastPrice.add(loadingPrice.negate())).divide(loadingPrice, 4, RoundingMode.HALF_DOWN)).doubleValue();
-//                                          double percentChange = 0.0;
                                           LineItemDto lineItemDto = new LineItemDto(lineItemId,
                                                                                     isin,
                                                                                     productName,
