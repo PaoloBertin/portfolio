@@ -59,7 +59,10 @@
                             <td class="text-right" th:text="${lineItem.avgLoadPrice}"></td>
                             <td class="text-right" th:text="${lineItem.lastPrice}"></td>
                             <td class="text-right" th:text="${lineItem.actualValue}"></td>
-                            <td class="text-right" th:text="${lineItem.percentChange}"></td>
+                            <td class="text-right"
+                                th:style="${lineItem.percentChange < 0 ? 'color: red;' : 'color: black;'}"
+                                th:text="${#numbers.formatDecimal(lineItem.percentChange, 1, 2)}">
+                            </td>
                         </tr>
                         </tbody>
                     </table>
